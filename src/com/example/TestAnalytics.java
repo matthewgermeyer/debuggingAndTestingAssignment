@@ -20,7 +20,8 @@ public class TestAnalytics {
         // Exception test
         try {
             analyticsImpl.addEvent(null);
-            Assert.fail("Adding a null event should throw an exception ... ");
+
+            Assert.fail(" if event is null we should get illegal argument exc.. ");
         } catch (IllegalArgumentException e) {
             // All's well
         }
@@ -28,7 +29,7 @@ public class TestAnalytics {
 
         try {
             analyticsImpl.addEvent(event);
-            Assert.fail("All 3 paramaters are null .. ");
+            Assert.fail("This is bad ... ");
         } catch (IllegalArgumentException e) {
             // All's well
         }
@@ -37,32 +38,12 @@ public class TestAnalytics {
         event.setAt(LocalDateTime.now());
         event.setName("Marty");
 
+        //flag represents the bool that addEvent returns..
         boolean flag = analyticsImpl.addEvent(event);
+        //Assert that flag is true (it should be.. unless..)
         Assert.assertTrue(flag);
 
-//
-//        // Boundary test
-//        assertEquals(analyticsImpl.addEvent(""), 0);
-//
-//        // Random test
-//        String randomText = RandomStringUtils.random(random.nextInt(1000));
-//        System.out.printf("length=%d for %s%n", randomText.length(), randomText);
-//        assertEquals(foo.getStringLength(randomText), randomText.length());
     }
-
-    // new copy of above:
-    /*
-    The requirements have changed. Action can only be one of the following values:
-Face2Face
-PhoneCall
-TextMessaging
-Unknown
-
-The action variable in Event has to stay a String for backward compatibility.
-Add a check in the addEvent method to validate the String value. If not valid throw an IllegalArgumentException.
-
-Refactor the test case before making the changes to the addEvent method.
-     */
 
     @Test
     public void testAction() throws Exception {
@@ -70,13 +51,15 @@ Refactor the test case before making the changes to the addEvent method.
 
         Event event = new Event();
 
+        // setting action to bad value.
         event.setAction("blah");
         event.setAt(LocalDateTime.now());
         event.setName("Marty");
 
+        //test for accepted actions.... 'blah' is not one we want for Action.
         try {
             analyticsImpl.addEvent(event);
-            Assert.fail("Action was not an allowed value ..  ");
+            Assert.fail("should not get here..illegal argument should be thrown for action -> 'blah'  ");
         } catch (IllegalArgumentException e) {
             // All's well
         }

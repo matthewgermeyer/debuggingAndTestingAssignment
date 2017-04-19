@@ -10,12 +10,13 @@ import java.util.logging.Logger;
  */
 
 public class AnalyticsImpl implements Analytics {
-    Random rando = new Random();
+    private static final Random rando = new Random();
     private static final Logger LOGGER = Logger.getLogger("com.example");
 
 
     @Override
-    public boolean addEvent(Event event) throws InterruptedException {
+    public boolean addEvent(Event event) {
+
         //Timestamp1
         Instant firstInstant = Instant.now();
         if (event == null) {
@@ -23,10 +24,10 @@ public class AnalyticsImpl implements Analytics {
         }
 
         if (event.getAction() == null || event.getAt() == null || event.getName() == null) {
-            throw new IllegalArgumentException("Please set all 3 parameters .. ");
+            throw new IllegalArgumentException("Please set all 3 instance variables .. ");
         }
 
-        boolean isActionOk = event.getAction().equals ("Face2Face") || event.getAction().equals ("PhoneCall") || event.getAction().equals ("TextMessaging") || event.getAction().equals ("Unknown");
+        boolean isActionOk = event.getAction().equals("Face2Face") || event.getAction().equals("PhoneCall") || event.getAction().equals("TextMessaging") || event.getAction().equals("Unknown");
 
         if (!isActionOk) {
             throw new IllegalArgumentException("Not a valid action .. ");
@@ -34,8 +35,11 @@ public class AnalyticsImpl implements Analytics {
 
         System.out.println(event);
 
-
-        Thread.sleep(rando.nextInt(3000));
+        try {
+            Thread.sleep(rando.nextInt(3000));
+        } catch (InterruptedException e) {
+            //do nothing
+        }
 
         Instant secondInstant = Instant.now();
         Duration duration = Duration.between(firstInstant, secondInstant);
@@ -43,9 +47,11 @@ public class AnalyticsImpl implements Analytics {
 
         //Log the logDuration
         LOGGER.info(duration.toString());
+        //return false 10% of the time (BUG!)
         if (rando.nextInt(10) == 1) {
             return false;
         }
+
         return true;
 
     }
